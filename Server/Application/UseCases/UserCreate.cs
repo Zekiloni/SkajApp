@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Server.Core.Entities;
 using Server.Ports.Inbound;
-using SkajApp.ApiService.Application.DTOs;
+using Shared.DTOs;
 
 namespace SkajApp.ApiService.Application.UseCases
 {
