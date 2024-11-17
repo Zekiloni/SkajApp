@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Server.Core.Entities;
+﻿using Server.Core.Entities;
 using Server.Ports.Outbound;
-using SkajApp.ApiService.Infrastructure.Persistence;
+using Server.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Server.Adapters.Outbound
 {

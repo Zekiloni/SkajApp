@@ -6,8 +6,8 @@ namespace Server.Ports.Inbound
     {
         public Task<User> CreateUser(User user);
 
-        public Task<User> GetUserById(Guid userId);
+        public Task<User?> GetUserById(Guid userId);
 
-        public Task<User> UpdateUser(Guid userId, User user);
+        public Task<User> UpdateUser(User user);
     }
 }

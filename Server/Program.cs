@@ -1,5 +1,15 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using SkajApp.ApiService.Infrastructure.Persistence;
+using Microsoft.IdentityModel.Tokens;
+using Server.Adapters.Outbound;
+using Server.Core.Services;
+using Server.Infrastructure.Mapper;
+using Server.Infrastructure.Persistence;
+using Server.Infrastructure.Security;
+using Server.Infrastructure.WebSocket;
+using Server.Ports.Inbound;
+using SkajApp.Application.UseCases;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +20,42 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseMySQL(builder.Configuration.GetConnectionString("MySqlConnection")));
+string? connectionString = builder.Configuration.GetConnectionString("MySqlConnection");
+
+builder.Services.AddDbContextPool<DatabaseContext>(options =>
+{
+    options.UseMySQL(connectionString!, mysqlOptions =>
+    {
+        mysqlOptions.EnableRetryOnFailure(1, TimeSpan.FromSeconds(5), null);
+    });
+});
+
+var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
+string? jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+ .AddJwtBearer(options =>
+ {
+     options.TokenValidationParameters = new TokenValidationParameters
+     {
+         ValidateIssuer = true,
+         ValidateAudience = true,
+         ValidateLifetime = true,
+         ValidateIssuerSigningKey = true,
+         ValidIssuer = jwtIssuer,
+         ValidAudience = jwtIssuer,
+         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+     };
+ });
+
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<JwtTokenService>();
+builder.Services.AddScoped<UserCreate>();
+
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -22,10 +66,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
+app.MapHub<ChatHub>("/chat");
 app.MapControllers();
 
 app.Run();
