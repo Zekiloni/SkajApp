@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Server.Core.Entities;
 
-namespace SkajApp.ApiService.Infrastructure.Persistence
+namespace Server.Infrastructure.Persistence
 {
     public class DatabaseContext : DbContext
     {
@@ -14,7 +14,6 @@ namespace SkajApp.ApiService.Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<User>()
                         .HasIndex(u => u.Username)
@@ -36,6 +35,8 @@ namespace SkajApp.ApiService.Infrastructure.Persistence
             modelBuilder.Entity<Conversation>()
                         .HasIndex(g => g.Name)
                         .IsUnique();
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
