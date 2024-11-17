@@ -2,6 +2,7 @@
 
 namespace Server.Core.Entities
 {
+    [Table("user_conversation")]
     public class UserConversation
     {
         public Guid UserId { get; set; }

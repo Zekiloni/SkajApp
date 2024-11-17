@@ -1,6 +1,5 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,6 +19,7 @@ namespace Server.Core.Entities
         public string Username { get; private set; }
 
         [Required]
+        [Column("password")]
         public string Password { get; private set; }
 
         [Column("created_at")]
