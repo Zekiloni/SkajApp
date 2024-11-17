@@ -3,7 +3,7 @@ using Server.Core.Entities;
 using Server.Ports.Inbound;
 using Shared.DTOs;
 
-namespace SkajApp.ApiService.Application.UseCases
+namespace SkajApp.Application.UseCases
 {
     public class UserCreate
     {
@@ -15,7 +15,7 @@ namespace SkajApp.ApiService.Application.UseCases
             _userService = userService; 
         }
 
-        public async Task<UserResponse> Handle(CreateUserRequest createUserRequest)
+        public async Task<UserResponse> Handle(CreateUserReq createUserRequest)
         {
             User user = await _userService.CreateUser(_mapper.Map<User>(createUserRequest));
             return _mapper.Map<UserResponse>(user);

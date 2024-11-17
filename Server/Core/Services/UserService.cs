@@ -1,22 +1,34 @@
-﻿using Server.Ports.Inbound;
+﻿using Server.Adapters.Outbound;
+using Server.Core.Entities;
+using Server.Ports.Inbound;
 
 namespace Server.Core.Services
 {
     public class UserService : IUserService
     {
-        Task<User> IUserService.CreateUser(User user)
+        private readonly UserRepository _userRepository;
+
+        public UserService(UserRepository userRepository)
         {
-            throw new NotImplementedException();
+            this._userRepository = userRepository;
         }
 
-        Task<User> IUserService.GetUserById(Guid userId)
+
+        async Task<User> IUserService.CreateUser(User user)
         {
-            throw new NotImplementedException();
+            await _userRepository.CreateAsync(user);
+            return user;
         }
 
-        Task<User> IUserService.UpdateUser(Guid userId, User user)
+        async Task<User?> IUserService.GetUserById(Guid userId)
         {
-            throw new NotImplementedException();
+            return await _userRepository.GetByIdAsync(userId);
+        }
+
+        async Task<User> IUserService.UpdateUser(User user)
+        {
+            await _userRepository.UpdateAsync(user);
+            return user;
         }
     }
 }
