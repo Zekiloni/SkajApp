@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
+using Server.Infrastructure.Mapper;
 
-namespace SkajApp.ApiService.Infrastructure.Mapper
+namespace Server.Infrastructure.Mapper
 {
     public class AutoMapperSetup
     {
