@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SkajApp.ApiService.Application.DTOs;
-using SkajApp.ApiService.Application.UseCases;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Shared.DTOs;
+using SkajApp.Application.UseCases;
 
 namespace Server.Adapters.Inbound
 {
@@ -16,10 +17,18 @@ namespace Server.Adapters.Inbound
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserResponse>> CreateUser(CreateUserRequest request)
+        public async Task<ActionResult<UserResponse>> CreateUser(CreateUserReq request)
         {
             UserResponse? response = await _userCreate.Handle(request);
             return Ok(response);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<UserResponse>> RetrieveUser(string userId)
+        {
+           //UserResponse? response = await _userCreate.Handle(request);
+            return Ok();
         }
     }
 }
