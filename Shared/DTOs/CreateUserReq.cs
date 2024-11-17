@@ -2,7 +2,7 @@
 
 namespace Shared.DTOs
 {
-    public class CreateUserRequest
+    public class CreateUserReq
     {
         [Required]
         [MinLength(3)]
