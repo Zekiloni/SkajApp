@@ -2,7 +2,14 @@
 {
     public class UserAuthResponse
     {
-        public required string Token { get; set; }
-        public required UserResponse User { get; set; }
+
+        public string Token { get; private set; }
+        public UserResponse User { get; private set; }
+
+        public UserAuthResponse(string token, UserResponse user)
+        {
+            Token = token;
+            User = user;
+        }
     }
 }
