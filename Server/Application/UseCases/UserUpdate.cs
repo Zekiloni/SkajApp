@@ -1,4 +1,4 @@
-﻿namespace SkajApp.ApiService.Application.UseCases
+﻿namespace Server.Application.UseCases
 {
     public class UserUpdate
     {

@@ -24,7 +24,7 @@ namespace Server.Infrastructure.Security
             List<Claim>? claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
 
             var Sectoken = new JwtSecurityToken(_configuration["Jwt:Issuer"],

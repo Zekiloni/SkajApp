@@ -3,7 +3,7 @@ using Server.Core.Entities;
 using Server.Ports.Inbound;
 using Shared.DTOs;
 
-namespace SkajApp.Application.UseCases
+namespace Server.Application.UseCases
 {
     public class UserCreate
     {
@@ -17,6 +17,11 @@ namespace SkajApp.Application.UseCases
 
         public async Task<UserResponse> Handle(CreateUserReq createUserRequest)
         {
+            if (await _userService.GetUserByUsername(createUserRequest.Username) != null)
+            {
+                throw new BadHttpRequestException("Username already exist");
+            }
+
             User user = await _userService.CreateUser(_mapper.Map<User>(createUserRequest));
             return _mapper.Map<UserResponse>(user);
         }

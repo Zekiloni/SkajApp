@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SkajApp.Infrastructure.Encryption
+namespace Server.Infrastructure.Encryption
 {
     public class AesEncryptionService : IEncryptionService
     {

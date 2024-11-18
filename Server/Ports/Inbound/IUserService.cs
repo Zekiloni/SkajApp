@@ -8,6 +8,12 @@ namespace Server.Ports.Inbound
 
         public Task<User?> GetUserById(Guid userId);
 
+        public Task<User?> GetUserByUsername(string username);
+
         public Task<User> UpdateUser(User user);
+
+        public bool ValidatePassword(User user, string password);
+
+        public void UpdateLastLogin(User user);
     }
 }

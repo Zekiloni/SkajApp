@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Server.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateMigration : Migration
+    public partial class InitMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,7 +35,7 @@ namespace Server.Migrations
                 {
                     id = table.Column<Guid>(type: "char(36)", nullable: false),
                     username = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    Password = table.Column<string>(type: "longtext", nullable: false),
+                    password = table.Column<string>(type: "longtext", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     last_login_at = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },

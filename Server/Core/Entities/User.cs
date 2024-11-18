@@ -11,59 +11,24 @@ namespace Server.Core.Entities
     {
         [Key]
         [Column("id")]
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
         [Required]
         [Column("username")]
         [MaxLength(50)]
-        public string Username { get; private set; }
+        public string Username { get; set; }
 
         [Required]
         [Column("password")]
-        public string Password { get; private set; }
+        public string Password { get; set; }
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; private set; }
+        public DateTime CreatedAt { get; set; }
 
         [Column("last_login_at")]
-        public DateTime? LastLoginAt { get; private set; }
+        public DateTime? LastLoginAt { get; set; }
 
-        public ICollection<UserConversation> UserConversations { get; private set; }
+        public required ICollection<UserConversation> UserConversations { get; set; }
 
-
-        public User(string username, string password)
-        {
-            Id = Guid.NewGuid();
-            Username = username;
-            Password = HashPassword(password);
-            CreatedAt = DateTime.UtcNow;
-            LastLoginAt = null;
-            UserConversations = new List<UserConversation>();
-        }
-
-        private string HashPassword(string password)
-        {
-            return BCrypt.Net.BCrypt.HashPassword(password);
-        }
-
-        public bool ValidatePassword(string password)
-        {
-            return BCrypt.Net.BCrypt.Verify(password, Password);
-        }
-
-        public void UpdateUsername(string newUsername)
-        {
-            Username = newUsername;
-        }
-
-        public void UpdatePassword(string newPassword)
-        {
-            Password = HashPassword(newPassword);
-        }
-
-        public void UpdateLastLogin()
-        {
-            LastLoginAt = DateTime.UtcNow;
-        }
     }
 }

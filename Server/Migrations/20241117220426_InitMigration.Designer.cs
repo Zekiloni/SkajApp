@@ -11,8 +11,8 @@ using Server.Infrastructure.Persistence;
 namespace Server.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241117205338_CreateMigration")]
-    partial class CreateMigration
+    [Migration("20241117220426_InitMigration")]
+    partial class InitMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,7 +70,8 @@ namespace Server.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("password");
 
                     b.Property<string>("Username")
                         .IsRequired()

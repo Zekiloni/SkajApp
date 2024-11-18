@@ -8,8 +8,10 @@ using Server.Infrastructure.Persistence;
 using Server.Infrastructure.Security;
 using Server.Infrastructure.WebSocket;
 using Server.Ports.Inbound;
-using SkajApp.Application.UseCases;
+using Server.Application.UseCases;
 using System.Text;
+using Server.Infrastructure.Web;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +20,33 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter 'Bearer' followed by a space and your token."
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 string? connectionString = builder.Configuration.GetConnectionString("MySqlConnection");
 
@@ -30,7 +58,7 @@ builder.Services.AddDbContextPool<DatabaseContext>(options =>
     });
 });
 
-var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
+string? jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
 string? jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -46,18 +74,36 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
          ValidAudience = jwtIssuer,
          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
      };
+
+     options.Events = new JwtBearerEvents
+     {
+         OnAuthenticationFailed = context =>
+         {
+             Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+             return Task.CompletedTask;
+         },
+         OnTokenValidated = context =>
+         {
+             Console.WriteLine($"Token validated for user: {context.Principal.Identity.Name}");
+             return Task.CompletedTask;
+         }
+     };
  });
 
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddScoped<UserCreate>();
+builder.Services.AddScoped<UserRetrieve>();
+builder.Services.AddScoped<UserAuth>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 builder.Services.AddSignalR();
 
 var app = builder.Build();
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -69,8 +115,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-app.UseAuthentication();
+app.UseAuthentication(); 
+app.UseAuthorization(); 
 
 app.MapHub<ChatHub>("/chat");
 app.MapControllers();

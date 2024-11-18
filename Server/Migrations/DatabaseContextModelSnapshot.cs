@@ -67,7 +67,8 @@ namespace Server.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("password");
 
                     b.Property<string>("Username")
                         .IsRequired()
