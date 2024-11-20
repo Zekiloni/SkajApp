@@ -1,0 +1,55 @@
+﻿
+<style>
+    a {
+        cursor: pointer;
+    }
+</style>
+
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        @if (isSignUpMode)
+        {
+            <h2 class="text-2xl font-semibold mb-4">Create an Account</h2>
+            <form>
+                <input @bind="username" type="text" placeholder="Username" class="form-control w-full p-2 mb-4 border rounded-lg" />
+                <input @bind="password" type="password" placeholder="Password" class="form-control w-full p-2 mb-4 border rounded-lg" />
+                <input @bind="confirmPassword" type="password" placeholder="Confirm Password" class="form-control w-full p-2 mb-4 border rounded-lg" />
+                <button type="button" class="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" @onclick="HandleSignUp">Sign Up</button>
+            </form>
+            <p class="mt-4 text-center text-gray-600">Already have an account? <a @onclick="ToggleSignUpMode" class="text-blue-500 hover:underline">Sign In</a></p>
+        }
+        else
+        {
+            <h2 class="text-2xl font-semibold mb-4">Sign In</h2>
+            <form>
+                <input @bind="username" type="text" placeholder="Username" class="form-control w-full p-2 mb-4 border rounded-lg" />
+                <input @bind="password" type="password" placeholder="Password" class="form-control w-full p-2 mb-4 border rounded-lg" />
+                <button type="button" class="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" @onclick="HandleLogin">Sign In</button>
+            </form>
+            <p class="mt-4 text-center text-gray-600">Don't have an account? <a @onclick="ToggleSignUpMode" class="text-blue-500 hover:underline">Sign Up</a></p>
+        }
+    </div>
+</div>
+
+@code {
+    private bool isSignUpMode = false;
+
+    private string? username;
+    private string? password;
+    private string? confirmPassword;
+
+    private async Task HandleLogin()
+    {
+        Console.WriteLine($"Logging in as: {username}");
+    }
+
+    private async Task HandleSignUp()
+    {
+        Console.WriteLine($"Signing up as: {username}");
+    }
+
+    private void ToggleSignUpMode()
+    {
+        isSignUpMode = !isSignUpMode;
+    }
+}

@@ -1,7 +1,16 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+@using Client.Components
 
-<h1>Hello, world!</h1>
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
-Welcome to your new app.
+<PageTitle>Skaj iz d limit</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        @* <Chat /> *@
+    </Authorized>
+    <NotAuthorized>
+        <Auth />
+    </NotAuthorized>
+</AuthorizeView>
