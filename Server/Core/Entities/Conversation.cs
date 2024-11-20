@@ -24,15 +24,6 @@ namespace Server.Core.Entities
 
         public ICollection<UserConversation> UserConversations { get; private set; }
 
-        public Conversation(string name, string description)
-        {
-            Id = Guid.NewGuid();
-            Name = name;
-            Description = description;
-            CreatedAt = DateTime.UtcNow;
-            UserConversations = new List<UserConversation>();
-        }
-
         public void AddUser(User user)
         {
             UserConversations.Add(new UserConversation { User = user, Conversation = this });
