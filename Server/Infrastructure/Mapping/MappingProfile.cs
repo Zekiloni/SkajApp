@@ -9,7 +9,7 @@ namespace Server.Infrastructure.Mapper
         public MappingProfile()
         {
             CreateMap<User, UserResponse>(); 
-            CreateMap<CreateUserReq, User>();
+            CreateMap<CreateUserRequest, User>();
         }
     }
 }

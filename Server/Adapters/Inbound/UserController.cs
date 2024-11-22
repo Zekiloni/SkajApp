@@ -21,7 +21,7 @@ namespace Server.Adapters.Inbound
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserResponse>> CreateUser(CreateUserReq request)
+        public async Task<ActionResult<UserResponse>> CreateUser(CreateUserRequest request)
         {
             UserResponse? response = await _userCreate.Handle(request);
             return Ok(response);

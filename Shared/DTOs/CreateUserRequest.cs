@@ -2,7 +2,7 @@
 
 namespace Shared.DTOs
 {
-    public class CreateUserReq
+    public class CreateUserRequest
     {
         [Required]
         [MinLength(3)]
@@ -13,5 +13,6 @@ namespace Shared.DTOs
         [MinLength(3)]
         [MaxLength(128)]
         public required string Password { get; set; }
+
     }
 }

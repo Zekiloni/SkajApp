@@ -1,12 +1,20 @@
 ﻿
+
+@inject UserApiClient userApiClient;
+@inject AuthStateProvider authStateProvider;
+
 <style>
     a {
-        cursor: pointer;
+    cursor: pointer;
     }
 </style>
 
 <div class="min-h-screen flex items-center justify-center bg-gray-100">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        @if (error != null) {
+            @error
+        }
+
         @if (isSignUpMode)
         {
             <h2 class="text-2xl font-semibold mb-4">Create an Account</h2>
@@ -38,14 +46,36 @@
     private string? password;
     private string? confirmPassword;
 
+    private string? error = null;
+
     private async Task HandleLogin()
     {
-        Console.WriteLine($"Logging in as: {username}");
+        if (username != null && password != null) {
+            UserAuthRequest request = new UserAuthRequest(username, password);
+            UserAuthResponse response = await userApiClient.AuthUserAsync(request);
+
+            if (response != null)
+            {
+                authStateProvider.NotifyUserAuthentication(response.Token);
+            }
+        }
     }
 
     private async Task HandleSignUp()
     {
-        Console.WriteLine($"Signing up as: {username}");
+        if (username != null && password != null)
+        {
+            CreateUserRequest request = new CreateUserRequest { Username = username, Password = password };
+            UserResponse response = await userApiClient.CreateUserAsync(request);
+
+            if (response != null)
+            {
+                Console.WriteLine(response);
+            } else {
+                error = "Wrong credentials.";
+            }
+
+        }
     }
 
     private void ToggleSignUpMode()

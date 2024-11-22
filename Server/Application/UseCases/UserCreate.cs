@@ -15,7 +15,7 @@ namespace Server.Application.UseCases
             _userService = userService; 
         }
 
-        public async Task<UserResponse> Handle(CreateUserReq createUserRequest)
+        public async Task<UserResponse> Handle(CreateUserRequest createUserRequest)
         {
             if (await _userService.GetUserByUsername(createUserRequest.Username) != null)
             {

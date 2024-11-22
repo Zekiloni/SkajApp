@@ -9,7 +9,7 @@ namespace Client.Core
         public SignalRService()
         {
             _hubConnection = new HubConnectionBuilder()
-                .WithUrl("http://localhost:5028")
+                .WithUrl("https://localhost:7139")
                 .WithAutomaticReconnect()
                 .Build();
         }

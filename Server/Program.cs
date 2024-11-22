@@ -13,7 +13,7 @@ using System.Text;
 using Server.Infrastructure.Web;
 using Microsoft.OpenApi.Models;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -101,9 +101,20 @@ builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 builder.Services.AddSignalR();
 
-var app = builder.Build();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", policy =>
+    {
+        policy.WithOrigins("https://localhost:7057", "http://localhost:5113")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+WebApplication app = builder.Build();
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -114,6 +125,8 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowSpecificOrigins");
 
 app.UseAuthentication(); 
 app.UseAuthorization(); 
