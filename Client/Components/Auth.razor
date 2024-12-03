@@ -5,7 +5,7 @@
 
 <style>
     a {
-    cursor: pointer;
+        cursor: pointer;
     }
 </style>
 
@@ -70,11 +70,11 @@
 
             if (response != null)
             {
-                Console.WriteLine(response);
+                isSignUpMode = false;
+                await HandleLogin();
             } else {
-                error = "Wrong credentials.";
+                error = "There was an error.";
             }
-
         }
     }
 

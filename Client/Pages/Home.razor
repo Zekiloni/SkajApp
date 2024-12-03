@@ -1,12 +1,14 @@
 ﻿@page "/"
 
+@using Client.Components
+
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Skaj iz d limit</PageTitle>
 
 <AuthorizeView>
     <Authorized>
-        @* <Chat /> *@
+        <Main />
     </Authorized>
     <NotAuthorized>
         <Auth />
